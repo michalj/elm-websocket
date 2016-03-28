@@ -1,13 +1,13 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
+    "summary": "Elm bindings for WebSocket",
     "repository": "https://github.com/user/project.git",
     "license": "BSD3",
     "source-directories": [
         "."
     ],
     "native-modules": true,
-    "exposed-modules": [],
+    "exposed-modules": [ "WebSocket" ],
     "dependencies": {
         "elm-lang/core": "3.0.0 <= v < 4.0.0"
     },

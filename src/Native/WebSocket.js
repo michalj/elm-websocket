@@ -1,3 +1,5 @@
+var lastMessage = "";
+
 Elm.Native.WebSocket = {};
 Elm.Native.WebSocket.make = function(localRuntime) {
   localRuntime.Native = localRuntime.Native || {};
@@ -9,24 +11,30 @@ Elm.Native.WebSocket.make = function(localRuntime) {
   var Task = Elm.Native.Task.make (localRuntime);
   var Utils = Elm.Native.Utils.make (localRuntime);
 
-  function ioWrapper(url, onopen, onmessage, onclose) {
+  function ioWrapper(url, onmessage, onerror, onclose) {
     return Task.asyncFunction(function(callback) {
       var ws = new WebSocket(url);
       ws.onopen = function() {
-        Task.perform(onopen._0(Utils.Tuple0));
+        callback(Task.succeed(ws));
       };
       ws.onclose = function() {
         Task.perform(onclose._0(Utils.Tuple0));
       };
-      ws.onmessage = function(message) {
-        Task.perform(onmessage._0(message));
+      ws.onerror = function(error) {
+        Task.perform(onerror._0(Utils.Tuple0));
       };
-      Task.succeed(ws);
+      ws.onmessage = function(message) {
+        lastMessage = message;
+        Task.perform(onmessage._0(message.data));
+      };
     });
   }
 
   function sendWrapper(ws, message) {
-    Task.succeed(Utils.Tuple0);
+    return Task.asyncFunction(function(callback) {
+      ws.send(message);
+      callback(Task.succeed(Utils.Tuple0));
+    });
   }
 
   localRuntime.Native.WebSocket.values = {
