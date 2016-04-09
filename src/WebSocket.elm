@@ -1,6 +1,22 @@
 module WebSocket (Socket, Event (..), send, new) where
 
 {-| Elm bindings for WebSocket class.
+
+To get started have a look at
+[this example](https://github.com/michalj/elm-websocket/tree/master/examples).
+
+# Types
+
+@docs Socket, Event
+
+# Creating a socket
+
+@docs new
+
+# Sending messages
+
+@docs send
+
 -}
 
 import Task exposing (Task)
